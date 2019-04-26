@@ -3,6 +3,7 @@ import json
 from text.text_processor import text_cleaner
 from util.util_functions import *
 from sklearn.cluster import KMeans
+import sys
 
 
 def normalize_values(res_arr):
@@ -140,13 +141,17 @@ def get_summary(input_file_path, sum_percent, word_to_vec_model, corpus_path):
 
 
 if __name__ == '__main__':
+    # TODO : Need to discuss on which model it will work and how to get it in README
+    model_path = sys.argv[0]
     print("Going to load word2Vec Model, it may take a minute or more")
-    model = load_model('/home/muzaffar/work/ml-projects/quora/data/wiki-news-300d-1M/wiki-news-300d-1M.vec')
+    model = load_model(model_path)
     print("model loaded, now going to quickly generate summary")
-    corpus_file = '../data/corpus.jl'
+
+    # TODO : Need to discuss the file schema and how to generate it in README
+    corpus_file = sys.argv[1]
 
     summary_percent = 5
-    input_file = '/home/muzaffar/mydata/mudasir_sirs_project/hybrid-text-summarizer/temp_input/input/D0731G.input'
+    input_file = sys.argv[2]
     summary_sens = get_summary(input_file, summary_percent, word_to_vec_model=model,
                                corpus_path=corpus_file)
     for s in summary_sens:
