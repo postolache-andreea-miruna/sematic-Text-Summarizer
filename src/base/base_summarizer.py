@@ -1,9 +1,13 @@
 import json
-
-from text.text_processor import text_cleaner
-from util.util_functions import *
 from sklearn.cluster import KMeans
 import sys
+import nltk
+
+from src.text.text_processor import *
+from src.util.util_functions import *
+
+nltk.download('reuters')
+from nltk.corpus import reuters, stopwords
 
 
 def normalize_values(res_arr):
@@ -69,7 +73,6 @@ def get_summary_indices(cluster_score_map, sens, sum_words):
     for key, score_map in cluster_score_map.items():
         sorted_by_value = sorted(score_map.items(), key=lambda kv: kv[1], reverse=True)
         sorted_cl_map[key] = sorted_by_value
-    # print(len(sorted_cl_map))
 
     # Get final sentence indices.
     final_sumamry_indices = []
@@ -87,17 +90,11 @@ def get_summary_indices(cluster_score_map, sens, sum_words):
                     break
 
                 index = score_map[i][0]
-                # print(sens[index])
                 token_len = len(nl.word_tokenize(sens[index]))
                 if token_len > 15:
-                    # print(" token len  ",token_len )
-                    # print("\n\n\n")
-                    # print(sens[index])
                     final_sumamry_indices.append(index)
                     # TODO : don't consider those sentences whose length is less than certain threshhold.
                     x += token_len
-                # print("\n\n\n")
-                # print("  x  ", x, "  score  ", score_map[i][1], "  cluster  ", key,  "  i ", i, "  index ", index )
 
         i += 1
     return final_sumamry_indices
@@ -107,18 +104,22 @@ def get_summary_sentences(summary_indices, sens):
     return [text_cleaner(sens[x]) for x in summary_indices]
 
 
-def claculate_df(corpus_path):
+def calculate_df():
+    stop_words = stopwords.words('english') + list(punctuation)
+
     df_map = {}
-    doc_tokens = [set(get_cleaned_text(json.loads(line)['text'])) for line in open(corpus_path)]
-    D = len(doc_tokens)
-    for token_set in doc_tokens:
-        for token in token_set:
-            df_map[token] = df_map.get(token, 0) + 1
-    return df_map, D
+    print("going to read corpus for calculating document frequency")
+    for file_id in reuters.fileids():
+        # TO Get unique occurrence of word
+        words = set(tokenize(reuters.raw(file_id), stop_words))
+        for w in words:
+            df_map.setdefault(w, df_map.get(w, 0) + 1)
+    return df_map, len(reuters.fileids())
 
 
-def get_summary(input_file_path, sum_percent, word_to_vec_model, corpus_path):
-    df_map, D = claculate_df(corpus_path)
+def get_summary(input_file_path, sum_percent, model_path):
+    word_to_vec_model = load_model(model_path)
+    df_map, D = calculate_df()
 
     with open(input_file_path, 'r') as my_file:
         data = my_file.read().replace('\n', '')
@@ -140,19 +141,3 @@ def get_summary(input_file_path, sum_percent, word_to_vec_model, corpus_path):
     return get_summary_sentences(summary_indices, sens)
 
 
-if __name__ == '__main__':
-    # TODO : Need to discuss on which model it will work and how to get it in README
-    model_path = sys.argv[0]
-    print("Going to load word2Vec Model, it may take a minute or more")
-    model = load_model(model_path)
-    print("model loaded, now going to quickly generate summary")
-
-    # TODO : Need to discuss the file schema and how to generate it in README
-    corpus_file = sys.argv[1]
-
-    summary_percent = 5
-    input_file = sys.argv[2]
-    summary_sens = get_summary(input_file, summary_percent, word_to_vec_model=model,
-                               corpus_path=corpus_file)
-    for s in summary_sens:
-        print(s)

@@ -1,4 +1,3 @@
-import re
 import nltk as nl
 from nltk.stem.porter import *
 from nltk.corpus import stopwords
@@ -15,6 +14,18 @@ def remove_stop_words(words):
     """
     custom_stop_words = set(stopwords.words('english') + list(punctuation))
     return [stemmer.stem(word) for word in words if word not in custom_stop_words]
+
+
+def tokenize(text, stop_words):
+    """
+    Tokenizes a given text and also removes stop words.
+    :param text:
+    :param stop_words:
+    :return:
+    """
+    words = nl.word_tokenize(text)
+    words = [w.lower() for w in words]
+    return [w for w in words if w not in stop_words and not w.isdigit()]
 
 
 def text_cleaner(in_text):
