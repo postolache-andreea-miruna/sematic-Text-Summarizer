@@ -7,7 +7,7 @@ import nltk as nl
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-from src.text.text_processor import get_cleaned_text
+from text.text_processor import get_cleaned_text
 
 
 def get_sen_length(sen):

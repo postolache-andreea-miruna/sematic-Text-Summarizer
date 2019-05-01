@@ -3,8 +3,8 @@ from sklearn.cluster import KMeans
 import sys
 import nltk
 
-from src.text.text_processor import *
-from src.util.util_functions import *
+from text.text_processor import *
+from util.util_functions import *
 
 nltk.download('reuters')
 from nltk.corpus import reuters, stopwords

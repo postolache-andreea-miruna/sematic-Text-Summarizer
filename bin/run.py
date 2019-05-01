@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-
-from src.base.base_summarizer import get_summary
+from base.base_summarizer import get_summary
 
 if __name__ == '__main__':
     model_path = sys.argv[0]
@@ -13,5 +12,5 @@ if __name__ == '__main__':
     summary_percent = 5
     input_file = sys.argv[1]
     summary_sens = get_summary(input_file, summary_percent, model_path=model_path)
-    for s in ["this"]:
+    for s in summary_sens:
         print(s)

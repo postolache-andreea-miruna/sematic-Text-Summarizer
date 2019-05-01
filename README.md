@@ -44,8 +44,8 @@ USAGE:
 * start virtualenv by running `. ven/bin/activate`
 * install requirements by following command
  ``pip install -r requirements.txt``
-* Run command `bin/env.py` 
-* Run command `bin/run.py word2vecModelPath filePath`
+* Run command `. bin/env.py` 
+* Run command `run.py word2vecModelPath filePath`
 word2vecModelPath is full path of word2vec model and filePath is
 the path of text file for which you want to get summary .
 
