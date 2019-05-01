@@ -41,6 +41,7 @@ https://dl.fbaipublicfiles.com/fasttext/vectors-english/wiki-news-300d-1M.vec.zi
 USAGE:
 ======
 * create a virtual environment by running command``virtualenv ven``.
+* start virtualenv by running `. ven/bin/activate`
 * install requirements by following command
  ``pip install -r requirements.txt``
 * Run command `bin/env.py` 
