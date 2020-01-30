@@ -22,7 +22,7 @@ The project contains three packages inside `src` as:
  * `util`
 
 In package `base` there is main summarizer module.
-Package text contains text processor module in there are
+Package `text` contains `text_processor` module and there are
 different text processing methods.
 Package `util` contains util module in which there are
 different miscellaneous .
