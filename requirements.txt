@@ -1,4 +1,5 @@
 nltk
 numpy
-sklearn
+scikit-learn
 gensim
+flask
